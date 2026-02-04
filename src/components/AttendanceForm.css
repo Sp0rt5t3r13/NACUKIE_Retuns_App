@@ -150,38 +150,6 @@
   letter-spacing: 2px;
 }
 
-/* Offerings field specific styling */
-.offerings-field {
-  position: relative;
-}
-
-.offerings-input-container {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.offerings-input {
-  text-align: right;
-  font-family: 'Courier New', monospace;
-  font-weight: 500;
-  padding-right: 12px;
-  letter-spacing: 0.5px;
-}
-
-.offerings-hint {
-  text-align: right;
-  margin-top: 2px;
-}
-
-.offerings-hint small {
-  color: #666;
-  font-size: 0.7rem;
-  opacity: 0.8;
-  display: block;
-  line-height: 1.2;
-}
-
 /* Make the Add button field align properly */
 .form-field.add-button-field {
   align-self: flex-end;
@@ -263,6 +231,10 @@ input::placeholder {
 .offerings-input {
   text-align: right;
   font-family: 'Courier New', monospace;
+  font-weight: 500;
+  padding-right: 12px;
+  letter-spacing: 0.5px;
+  width: 100%;
 }
 
 /* Add Button */

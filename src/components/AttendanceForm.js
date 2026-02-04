@@ -427,21 +427,16 @@ function AttendanceForm() {
           {/* Offerings with auto-decimal */}
           <div className="form-field offerings-field">
             <label htmlFor="offerings">Offerings</label>
-            <div className="offerings-input-container">
-              <input
-                type="text"
-                id="offerings"
-                name="offerings"
-                value={formatOfferingsInput(currentEntry.offerings)}
-                onChange={handleInputChange}
-                placeholder="0.00"
-                className="offerings-input"
-                inputMode="decimal"
-              />
-              <div className="offerings-hint">
-                <small>Type numbers only</small>
-              </div>
-            </div>
+            <input
+              type="text"
+              id="offerings"
+              name="offerings"
+              value={formatOfferingsInput(currentEntry.offerings)}
+              onChange={handleInputChange}
+              placeholder="0.00"
+              className="offerings-input"
+              inputMode="decimal"
+            />
           </div>
 
           {/* Add Button */}
