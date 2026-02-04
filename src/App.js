@@ -133,9 +133,9 @@ function App() {
         
         <main>
           <div className="dashboard">
-            <div className="welcome-message">
-              <h2>Welcome to Returns Management</h2>
-              <p className="subtitle">Efficient document processing for NACUKIE returns</p>
+            <div className="dashboard-header">
+              <h2>📊 NACUKIE Attendance & Offering System</h2>
+              <p className="subtitle">Record and submit service data with supporting documents</p>
             </div>
 
             <ReturnsForm />

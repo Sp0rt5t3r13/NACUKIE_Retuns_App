@@ -464,4 +464,212 @@ select {
   .file-size, .remove-file {
     margin-left: 0;
   }
+
+  /* ====== NEW STYLES FOR UPDATED FORM ====== */
+
+  /* Field hints */
+  .field-hint {
+    color: #666;
+    font-size: 0.85rem;
+    margin-top: 5px;
+    display: block;
+  }
+
+  /* Number input with buttons */
+  .number-input-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .number-btn {
+    width: 36px;
+    height: 36px;
+    background: #3498db;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+  }
+
+  .number-btn:hover {
+    background: #2980b9;
+    transform: scale(1.05);
+  }
+
+  .number-btn.minus {
+    background: #e74c3c;
+  }
+
+  .number-btn.minus:hover {
+    background: #c0392b;
+  }
+
+  .number-input-container input {
+    flex: 1;
+    text-align: center;
+    padding: 10px;
+  }
+
+  /* Attendance total display */
+  .attendance-total .total-display {
+    background: #e8f4fc;
+    border: 2px solid #3498db;
+    border-radius: 8px;
+    padding: 15px;
+    text-align: center;
+    margin-top: 8px;
+  }
+
+  .total-number {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #2c3e50;
+    display: block;
+    line-height: 1;
+  }
+
+  .total-label {
+    color: #666;
+    font-size: 0.9rem;
+    display: block;
+    margin-top: 5px;
+  }
+
+  /* Currency input */
+  .currency-input-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  .currency-symbol {
+    position: absolute;
+    left: 14px;
+    color: #666;
+    font-weight: bold;
+    z-index: 1;
+  }
+
+  .currency-input {
+    padding-left: 30px !important;
+  }
+
+  /* Form Summary */
+  .form-summary {
+    background: linear-gradient(135deg, #f1f8ff 0%, #e3f2fd 100%);
+    padding: 25px;
+    border-radius: 10px;
+    margin: 30px 0;
+    border-left: 5px solid #3498db;
+  }
+
+  .form-summary h4 {
+    color: #2c3e50;
+    margin-bottom: 20px;
+    font-size: 1.3rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 15px;
+  }
+
+  .summary-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 15px;
+    background: white;
+    border-radius: 6px;
+    border: 1px solid #e2e8f0;
+  }
+
+  .summary-label {
+    color: #666;
+    font-weight: 500;
+    font-size: 0.95rem;
+  }
+
+  .summary-value {
+    color: #2c3e50;
+    font-weight: 600;
+    font-size: 1rem;
+  }
+
+  .summary-value.highlight {
+    color: #27ae60;
+    font-size: 1.1rem;
+  }
+
+  /* Service type specific styling */
+  select#serviceType {
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    background-size: 16px;
+    padding-right: 40px;
+  }
+
+  /* Update upload instructions for church context */
+  .upload-instructions ul {
+    list-style: none;
+    padding-left: 20px;
+    margin: 15px 0;
+  }
+
+  .upload-instructions li {
+    padding: 5px 0;
+    color: #666;
+    position: relative;
+    padding-left: 25px;
+  }
+
+  .upload-instructions li:before {
+    content: '📄';
+    position: absolute;
+    left: 0;
+    top: 5px;
+  }
+
+  /* Responsive adjustments for new components */
+  @media (max-width: 768px) {
+    .number-input-container {
+      flex-wrap: wrap;
+    }
+
+    .number-btn {
+      order: 1;
+    }
+
+    .number-input-container input {
+      order: 2;
+      width: 100%;
+      margin: 10px 0;
+    }
+
+    .summary-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .summary-item {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 5px;
+    }
+
+    .summary-value {
+      align-self: flex-end;
+    }
+  }
 }
