@@ -69,8 +69,8 @@ function AttendanceForm() {
         });
       }
     } else if (name === 'offerings') {
-      // AUTO-DECIMAL FORMATTING FOR CURRENCY
-      // Remove any non-digit characters
+      // SIMPLE AUTO-DECIMAL FORMATTING
+      // Get only digits from input
       const digitsOnly = value.replace(/[^\d]/g, '');
       
       if (digitsOnly === '') {
@@ -78,18 +78,44 @@ function AttendanceForm() {
           ...currentEntry,
           [name]: ''
         });
-      } else {
-        // Convert to decimal (last 2 digits are cents)
-        const amount = parseInt(digitsOnly, 10) / 100;
-        
-        // Format with 2 decimal places
-        const formatted = amount.toFixed(2);
-        
+        return;
+      }
+      
+      // Remove any leading zeros
+      const cleanDigits = digitsOnly.replace(/^0+/, '');
+      
+      // If all zeros or empty after removing leading zeros
+      if (cleanDigits === '') {
         setCurrentEntry({
           ...currentEntry,
-          [name]: formatted
+          [name]: '0.00'
         });
+        return;
       }
+      
+      // Handle based on length
+      let amount;
+      const length = cleanDigits.length;
+      
+      if (length === 1) {
+        // Single digit: "5" -> 0.05
+        amount = parseInt(cleanDigits, 10) / 100;
+      } else if (length === 2) {
+        // Two digits: "50" -> 0.50
+        amount = parseInt(cleanDigits, 10) / 100;
+      } else {
+        // Three or more digits: "500" -> 5.00, "5000" -> 50.00
+        // Last 2 digits are cents
+        const dollarsPart = cleanDigits.slice(0, -2);
+        const centsPart = cleanDigits.slice(-2);
+        
+        amount = parseFloat(`${dollarsPart}.${centsPart}`);
+      }
+      
+      setCurrentEntry({
+        ...currentEntry,
+        [name]: amount.toFixed(2)
+      });
     } else {
       setCurrentEntry({
         ...currentEntry,
@@ -244,13 +270,9 @@ function AttendanceForm() {
     'July', 'August', 'September', 'October', 'November', 'December'
   ];
 
-  // Format offerings for input display (remove trailing .00 if whole number)
+  // Format offerings for input display
   const formatOfferingsInput = (value) => {
     if (!value || value === '0.00') return '';
-    const num = parseFloat(value);
-    if (num % 1 === 0) {
-      return num.toString();
-    }
     return value;
   };
 
@@ -425,7 +447,7 @@ function AttendanceForm() {
           </div>
 
           {/* Offerings with auto-decimal */}
-          <div className="form-field offerings-field">
+          <div className="form-field">
             <label htmlFor="offerings">Offerings</label>
             <input
               type="text"
