@@ -150,6 +150,44 @@
   letter-spacing: 2px;
 }
 
+/* Offerings field specific styling */
+.offerings-field {
+  position: relative;
+}
+
+.offerings-input-container {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.offerings-input {
+  text-align: right;
+  font-family: 'Courier New', monospace;
+  font-weight: 500;
+  padding-right: 12px;
+  letter-spacing: 0.5px;
+}
+
+.offerings-hint {
+  text-align: right;
+  margin-top: 2px;
+}
+
+.offerings-hint small {
+  color: #666;
+  font-size: 0.7rem;
+  opacity: 0.8;
+  display: block;
+  line-height: 1.2;
+}
+
+/* Make the Add button field align properly */
+.form-field.add-button-field {
+  align-self: flex-end;
+  padding-top: 20px; /* Adjust to align with input fields */
+}
+
 /* Entry Form Section */
 .entry-form-section {
   background: #f8fafc;
@@ -161,7 +199,7 @@
 
 .entry-form-row {
   display: grid;
-  grid-template-columns: 80px 100px 100px 100px 120px 100px;
+  grid-template-columns: 80px 100px 100px 100px 140px 100px;
   gap: 15px;
   align-items: end;
 }

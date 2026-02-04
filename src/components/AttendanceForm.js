@@ -69,11 +69,25 @@ function AttendanceForm() {
         });
       }
     } else if (name === 'offerings') {
-      // Allow numbers and one decimal point
-      if (value === '' || /^\d*\.?\d{0,2}$/.test(value)) {
+      // AUTO-DECIMAL FORMATTING FOR CURRENCY
+      // Remove any non-digit characters
+      const digitsOnly = value.replace(/[^\d]/g, '');
+      
+      if (digitsOnly === '') {
         setCurrentEntry({
           ...currentEntry,
-          [name]: value
+          [name]: ''
+        });
+      } else {
+        // Convert to decimal (last 2 digits are cents)
+        const amount = parseInt(digitsOnly, 10) / 100;
+        
+        // Format with 2 decimal places
+        const formatted = amount.toFixed(2);
+        
+        setCurrentEntry({
+          ...currentEntry,
+          [name]: formatted
         });
       }
     } else {
@@ -114,12 +128,17 @@ function AttendanceForm() {
     // Clear any error messages
     setSubmitMessage('');
 
+    // Calculate total attendance
+    const members = parseInt(currentEntry.members) || 0;
+    const guests = parseInt(currentEntry.guests) || 0;
+    const totalAttendance = members + guests;
+
     // Add to monthly entries
     const newEntry = {
       ...currentEntry,
       ...locationData, // Include district and congregation
       id: Date.now(), // Unique ID for each entry
-      totalAttendance: (parseInt(currentEntry.members) || 0) + (parseInt(currentEntry.guests) || 0),
+      totalAttendance: totalAttendance,
       timestamp: new Date().toISOString()
     };
 
@@ -167,6 +186,17 @@ function AttendanceForm() {
 
   const monthlyTotals = calculateMonthlyTotals();
 
+  // Format offerings for display in table
+  const formatOfferingsDisplay = (value) => {
+    if (!value) return '0.00';
+    const num = parseFloat(value);
+    if (isNaN(num)) return '0.00';
+    return num.toLocaleString('en-US', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    });
+  };
+
   // Handle final submission
   const handleSubmitMonthlySheet = async () => {
     if (monthlyEntries.length === 0) {
@@ -213,6 +243,16 @@ function AttendanceForm() {
     'January', 'February', 'March', 'April', 'May', 'June',
     'July', 'August', 'September', 'October', 'November', 'December'
   ];
+
+  // Format offerings for input display (remove trailing .00 if whole number)
+  const formatOfferingsInput = (value) => {
+    if (!value || value === '0.00') return '';
+    const num = parseFloat(value);
+    if (num % 1 === 0) {
+      return num.toString();
+    }
+    return value;
+  };
 
   return (
     <div className="attendance-form-container">
@@ -384,18 +424,24 @@ function AttendanceForm() {
             />
           </div>
 
-          {/* Offerings */}
-          <div className="form-field">
+          {/* Offerings with auto-decimal */}
+          <div className="form-field offerings-field">
             <label htmlFor="offerings">Offerings</label>
-            <input
-              type="text"
-              id="offerings"
-              name="offerings"
-              value={currentEntry.offerings}
-              onChange={handleInputChange}
-              placeholder="0.00"
-              className="offerings-input"
-            />
+            <div className="offerings-input-container">
+              <input
+                type="text"
+                id="offerings"
+                name="offerings"
+                value={formatOfferingsInput(currentEntry.offerings)}
+                onChange={handleInputChange}
+                placeholder="0.00"
+                className="offerings-input"
+                inputMode="decimal"
+              />
+              <div className="offerings-hint">
+                <small>Type numbers only</small>
+              </div>
+            </div>
           </div>
 
           {/* Add Button */}
@@ -486,11 +532,11 @@ function AttendanceForm() {
                     <td className="guests-cell">{entry.guests || '0'}</td>
                     <td className="total-cell">
                       <span className="total-badge">
-                        {(parseInt(entry.members) || 0) + (parseInt(entry.guests) || 0)}
+                        {entry.totalAttendance || 0}
                       </span>
                     </td>
                     <td className="offerings-cell">
-                      {entry.offerings ? parseFloat(entry.offerings).toFixed(2) : '0.00'}
+                      {formatOfferingsDisplay(entry.offerings)}
                     </td>
                     <td className="action-cell">
                       <button
@@ -523,7 +569,7 @@ function AttendanceForm() {
                     </strong>
                   </td>
                   <td className="total-offerings">
-                    <strong>{monthlyTotals.totalOfferings.toFixed(2)}</strong>
+                    <strong>{formatOfferingsDisplay(monthlyTotals.totalOfferings.toString())}</strong>
                   </td>
                   <td colSpan="1">
                     <small>{monthlyEntries.length} services</small>
@@ -607,7 +653,7 @@ function AttendanceForm() {
               <div className="card-icon">💰</div>
               <div className="card-content">
                 <div className="card-label">Total Offerings</div>
-                <div className="card-value">{monthlyTotals.totalOfferings.toFixed(2)}</div>
+                <div className="card-value">{formatOfferingsDisplay(monthlyTotals.totalOfferings.toString())}</div>
               </div>
             </div>
           </div>
