@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import AttendanceForm from './components/AttendanceForm';
+import churchLogo from './assets/logo.png';
 import { 
   auth, 
   createUserWithEmailAndPassword, 
@@ -132,10 +133,17 @@ function App() {
         </header>
         
         <main>
-          <div className="dashboard">
-            <div className="dashboard-header">
-              <h2>📊 NACUKIE Attendance System</h2>
-              <p className="subtitle">Monthly Service Data Collection</p>
+          <div className="dashboard-header">
+            <div className="church-branding">
+              <img 
+                src={churchLogo} 
+                alt="New Apostolic Church Emblem" 
+                className="church-logo"
+              />
+              <div className="church-title">
+                <h2>New Apostolic Church UK and Ireland Returns</h2>
+                <p className="subtitle">Monthly Service Data Collection System</p>
+              </div>
             </div>
               
             <AttendanceForm />

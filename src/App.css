@@ -550,4 +550,58 @@ button:disabled:hover {
   .login-form, .signup-form {
     padding: 25px;
   }
+  /* Church Branding Styles */
+.church-branding {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 25px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.church-logo {
+  height: 70px;
+  width: auto;
+  object-fit: contain;
+}
+
+.church-title {
+  text-align: center;
+}
+
+.church-title h2 {
+  color: #2c3e50;
+  font-size: 2.2rem;
+  margin-bottom: 10px;
+  line-height: 1.3;
+}
+
+.church-title .subtitle {
+  color: #666;
+  font-size: 1.2rem;
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.5;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .church-branding {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .church-logo {
+    height: 60px;
+  }
+  
+  .church-title h2 {
+    font-size: 1.8rem;
+  }
+  
+  .church-title .subtitle {
+    font-size: 1.1rem;
+  }
+}
 }
