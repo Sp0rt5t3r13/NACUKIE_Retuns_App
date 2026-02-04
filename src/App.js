@@ -134,10 +134,10 @@ function App() {
         <main>
           <div className="dashboard">
             <div className="dashboard-header">
-              <h2>📊 NACUKIE Monthly Attendance System</h2>
-              <p className="subtitle">Spreadsheet format for service data collection</p>
+              <h2>📊 NACUKIE Attendance System</h2>
+              <p className="subtitle">Monthly Service Data Collection</p>
             </div>
-
+              
             <AttendanceForm />
 
             <div className="app-description">

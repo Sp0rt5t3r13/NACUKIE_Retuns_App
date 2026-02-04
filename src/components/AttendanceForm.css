@@ -1,4 +1,4 @@
-/* AttendanceForm.css - Updated for Better Layout */
+/* AttendanceForm.css - Clean & Aligned */
 
 .attendance-form-container {
   background: white;
@@ -8,28 +8,6 @@
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
-}
-
-.form-header {
-  text-align: center;
-  margin-bottom: 30px;
-  padding-bottom: 20px;
-  border-bottom: 2px solid #eef2f7;
-}
-
-.form-header h2 {
-  color: #2c3e50;
-  font-size: 2rem;
-  margin-bottom: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 15px;
-}
-
-.form-header p {
-  color: #666;
-  font-size: 1.1rem;
 }
 
 /* Section Title */
@@ -60,7 +38,7 @@
   background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
   padding: 25px;
   border-radius: 10px;
-  margin-bottom: 25px;
+  margin-bottom: 20px;
   border: 2px solid #bae6fd;
 }
 
@@ -107,19 +85,23 @@
   padding: 15px;
   border-radius: 8px;
   border: 2px solid #0369a1;
+  min-height: 56px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .month-label {
   display: block;
-  font-size: 1.4rem;
+  font-size: 1.3rem;
   font-weight: bold;
   color: #0369a1;
-  margin-bottom: 5px;
+  margin-bottom: 2px;
 }
 
 .year-label {
   display: block;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   color: #666;
 }
 
@@ -128,7 +110,7 @@
   background: #f8fafc;
   padding: 20px;
   border-radius: 8px;
-  margin-bottom: 25px;
+  margin-bottom: 20px;
   border-left: 4px solid #3498db;
 }
 
@@ -160,12 +142,6 @@
   background: white;
 }
 
-.sheet-number-input-container {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-}
-
 .sheet-number-input {
   text-align: center;
   font-weight: bold;
@@ -179,13 +155,13 @@
   background: #f8fafc;
   padding: 25px;
   border-radius: 10px;
-  margin-bottom: 30px;
+  margin-bottom: 15px;
   border: 2px solid #e2e8f0;
 }
 
 .entry-form-row {
   display: grid;
-  grid-template-columns: 80px 100px 100px 100px 120px 1fr 100px;
+  grid-template-columns: 80px 100px 100px 100px 120px 100px;
   gap: 15px;
   align-items: end;
 }
@@ -194,10 +170,6 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
-}
-
-.form-field.wide-field {
-  grid-column: span 2;
 }
 
 .form-field.add-button-field {
@@ -209,13 +181,6 @@
   color: #2c3e50;
   font-size: 0.9rem;
   white-space: nowrap;
-}
-
-.form-field small {
-  color: #666;
-  font-size: 0.8rem;
-  display: block;
-  text-align: center;
 }
 
 /* Input Styles */
@@ -262,10 +227,6 @@ input::placeholder {
   font-family: 'Courier New', monospace;
 }
 
-.notes-input {
-  width: 100%;
-}
-
 /* Add Button */
 .add-entry-btn {
   padding: 12px 24px;
@@ -282,7 +243,6 @@ input::placeholder {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
 }
 
 .add-entry-btn:hover:not(:disabled) {
@@ -296,35 +256,47 @@ input::placeholder {
   transform: none;
 }
 
-/* Current Sheet Info */
-.current-sheet-info {
+/* Success Message Bubble */
+.success-bubble {
   display: flex;
   align-items: center;
   gap: 10px;
-  margin-top: 15px;
-  padding: 10px 15px;
-  background: #e8f4fc;
-  border-radius: 6px;
-  border-left: 4px solid #3498db;
+  background: #d1fae5;
+  border: 2px solid #10b981;
+  color: #065f46;
+  padding: 12px 20px;
+  border-radius: 8px;
+  margin: 0 auto 20px auto;
+  max-width: 400px;
+  text-align: center;
+  animation: fadeIn 0.3s ease-in;
 }
 
-.sheet-label {
-  font-weight: 600;
-  color: #2c3e50;
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-.sheet-number-badge {
-  background: #3498db;
+.success-icon {
+  background: #10b981;
   color: white;
-  padding: 4px 12px;
-  border-radius: 4px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-weight: bold;
-  font-family: 'Courier New', monospace;
+}
+
+.success-text {
+  font-weight: 600;
+  font-size: 1rem;
 }
 
 /* Monthly Sheet Section */
 .monthly-sheet-section {
-  margin-bottom: 40px;
+  margin-bottom: 20px;
 }
 
 .sheet-header {
@@ -401,7 +373,7 @@ input::placeholder {
 .sheet-table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 800px;
+  min-width: 700px;
 }
 
 .sheet-table th {
@@ -490,15 +462,6 @@ input::placeholder {
   font-weight: 500;
 }
 
-.notes-cell {
-  max-width: 200px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  color: #666;
-  font-size: 0.9rem;
-}
-
 .remove-row-btn {
   background: none;
   border: none;
@@ -576,6 +539,48 @@ input::placeholder {
   margin: 0 auto;
 }
 
+/* Notes Section */
+.notes-section {
+  background: #f8fafc;
+  padding: 25px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  border: 2px solid #e2e8f0;
+}
+
+.notes-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.notes-textarea {
+  width: 100%;
+  padding: 15px;
+  border: 2px solid #e0e6ed;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-family: inherit;
+  resize: vertical;
+  min-height: 100px;
+  transition: all 0.2s;
+}
+
+.notes-textarea:focus {
+  outline: none;
+  border-color: #3498db;
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+.notes-hint {
+  text-align: right;
+}
+
+.notes-hint small {
+  color: #666;
+  font-size: 0.85rem;
+}
+
 /* Submission Section */
 .submission-section {
   background: linear-gradient(135deg, #f8fafc 0%, #eef2f7 100%);
@@ -627,4 +632,151 @@ input::placeholder {
   color: #666;
   font-size: 0.9rem;
   margin-bottom: 4px;
+}
+
+.card-value {
+  color: #2c3e50;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+/* Submission Actions */
+.submission-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.submit-monthly-btn {
+  padding: 20px 40px;
+  background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+}
+
+.submit-monthly-btn:hover:not(:disabled) {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(52, 152, 219, 0.3);
+}
+
+.submit-monthly-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.submission-note {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  border-left: 4px solid #27ae60;
+}
+
+.submission-note p {
+  color: #2c3e50;
+  margin-bottom: 15px;
+  font-weight: 600;
+}
+
+.submission-note ul {
+  padding-left: 25px;
+  color: #666;
+}
+
+.submission-note li {
+  margin-bottom: 8px;
+  padding-left: 10px;
+}
+
+/* Spinner */
+.spinner-small {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: white;
+  animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Submit Messages */
+.submit-message {
+  padding: 16px 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.submit-message.success {
+  background: #d1fae5;
+  color: #065f46;
+  border-left: 4px solid #10b981;
+}
+
+.submit-message.error {
+  background: #fee2e2;
+  color: #7f1d1d;
+  border-left: 4px solid #ef4444;
+}
+
+.submit-message.info {
+  background: #dbeafe;
+  color: #1e40af;
+  border-left: 4px solid #3b82f6;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .attendance-form-container {
+    padding: 20px;
+  }
+  
+  .location-form-grid,
+  .month-year-grid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+  
+  .entry-form-row {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+  
+  .form-field.add-button-field {
+    grid-column: span 3;
+  }
+  
+  .add-entry-btn {
+    width: 100%;
+  }
+  
+  .sheet-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .summary-cards {
+    grid-template-columns: 1fr;
+  }
+  
+  .submit-monthly-btn {
+    padding: 16px 20px;
+    font-size: 1.1rem;
+  }
 }

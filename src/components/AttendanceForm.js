@@ -17,9 +17,14 @@ function AttendanceForm() {
     serviceType: 'S', // S for Sunday, M for Midweek
     members: '',
     guests: '',
-    offerings: '',
-    notes: ''
+    offerings: ''
   });
+
+  // General notes for the month
+  const [monthlyNotes, setMonthlyNotes] = useState('');
+
+  // Success message state
+  const [successMessage, setSuccessMessage] = useState('');
 
   // All entries for the month
   const [monthlyEntries, setMonthlyEntries] = useState([]);
@@ -81,6 +86,9 @@ function AttendanceForm() {
 
   // Add current entry to monthly sheet
   const addToMonthlySheet = () => {
+    // Clear any existing success message
+    setSuccessMessage('');
+
     // Validate location data
     if (!locationData.district || !locationData.congregation) {
       setSubmitMessage({ type: 'error', text: 'Please enter District and Congregation' });
@@ -103,6 +111,9 @@ function AttendanceForm() {
       return;
     }
 
+    // Clear any error messages
+    setSubmitMessage('');
+
     // Add to monthly entries
     const newEntry = {
       ...currentEntry,
@@ -114,23 +125,20 @@ function AttendanceForm() {
 
     setMonthlyEntries([...monthlyEntries, newEntry]);
     
-    // Reset current entry (keep month/year and location)
+    // Show success message
+    setSuccessMessage(`Entry added for Day ${currentEntry.date}`);
+    
+    // Reset current entry (keep month/year, location, and sheet number)
     setCurrentEntry(prev => ({
-      sheetNumber: prev.sheetNumber, // Keep same sheet number for month
+      sheetNumber: prev.sheetNumber, // Keep same sheet number
       date: '',
       month: prev.month,
       year: prev.year,
       serviceType: 'S',
       members: '',
       guests: '',
-      offerings: '',
-      notes: ''
+      offerings: ''
     }));
-
-    setSubmitMessage({ 
-      type: 'success', 
-      text: `Entry added for Day ${currentEntry.date}` 
-    });
   };
 
   // Remove entry from monthly sheet
@@ -180,6 +188,7 @@ function AttendanceForm() {
         ...locationData,
         month: currentEntry.month,
         year: currentEntry.year,
+        monthlyNotes: monthlyNotes,
         entries: monthlyEntries,
         totals: monthlyTotals,
         submittedAt: new Date().toISOString()
@@ -193,8 +202,9 @@ function AttendanceForm() {
       });
       setIsSubmitting(false);
 
-      // Clear after successful submission (keep location data)
+      // Clear after successful submission (keep location data and notes)
       setMonthlyEntries([]);
+      setSuccessMessage('');
     }, 3000);
   };
 
@@ -203,9 +213,6 @@ function AttendanceForm() {
     'January', 'February', 'March', 'April', 'May', 'June',
     'July', 'August', 'September', 'October', 'November', 'December'
   ];
-
-  // Get unique sheet numbers used
-  const uniqueSheetNumbers = [...new Set(monthlyEntries.map(entry => entry.sheetNumber))];
 
   return (
     <div className="attendance-form-container">
@@ -254,21 +261,21 @@ function AttendanceForm() {
               <span className="month-label">{monthNames[currentEntry.month - 1]}</span>
               <span className="year-label">{currentEntry.year}</span>
             </div>
-            <small>Current Month</small>
           </div>
         </div>
       </div>
 
-      {/* Month/Year Selection */}
+      {/* Month/Year and Sheet Selection */}
       <div className="month-year-section">
         <div className="month-year-grid">
           <div className="month-year-cell">
-            <label htmlFor="month">Select Month:</label>
+            <label htmlFor="month">Month:</label>
             <select
               id="month"
               name="month"
               value={currentEntry.month}
               onChange={handleInputChange}
+              className="month-select"
             >
               {monthNames.map((month, index) => (
                 <option key={index} value={index + 1}>
@@ -279,7 +286,7 @@ function AttendanceForm() {
           </div>
 
           <div className="month-year-cell">
-            <label htmlFor="year">Select Year:</label>
+            <label htmlFor="year">Year:</label>
             <input
               type="number"
               id="year"
@@ -288,24 +295,22 @@ function AttendanceForm() {
               onChange={handleInputChange}
               min="2000"
               max="2100"
+              className="year-input"
             />
           </div>
 
           <div className="month-year-cell sheet-number-cell">
-            <label htmlFor="sheetNumber">Sheet # for Month:</label>
-            <div className="sheet-number-input-container">
-              <input
-                type="text"
-                id="sheetNumber"
-                name="sheetNumber"
-                value={currentEntry.sheetNumber}
-                onChange={handleInputChange}
-                placeholder="001"
-                maxLength="3"
-                className="sheet-number-input"
-              />
-              <small>3-digit sheet number for this month</small>
-            </div>
+            <label htmlFor="sheetNumber">Sheet #</label>
+            <input
+              type="text"
+              id="sheetNumber"
+              name="sheetNumber"
+              value={currentEntry.sheetNumber}
+              onChange={handleInputChange}
+              placeholder="001"
+              maxLength="3"
+              className="sheet-number-input"
+            />
           </div>
         </div>
       </div>
@@ -327,12 +332,11 @@ function AttendanceForm() {
               name="date"
               value={currentEntry.date}
               onChange={handleInputChange}
-              placeholder="1-31"
+              placeholder="Day"
               min="1"
               max="31"
               className="date-input"
             />
-            <small>Day</small>
           </div>
 
           {/* Service Type */}
@@ -392,21 +396,6 @@ function AttendanceForm() {
               placeholder="0.00"
               className="offerings-input"
             />
-            <small>Amount</small>
-          </div>
-
-          {/* Notes */}
-          <div className="form-field wide-field">
-            <label htmlFor="notes">Notes</label>
-            <input
-              type="text"
-              id="notes"
-              name="notes"
-              value={currentEntry.notes}
-              onChange={handleInputChange}
-              placeholder="Optional notes..."
-              className="notes-input"
-            />
           </div>
 
           {/* Add Button */}
@@ -422,16 +411,15 @@ function AttendanceForm() {
             </button>
           </div>
         </div>
-
-        {/* Sheet Number Display */}
-        {currentEntry.sheetNumber && (
-          <div className="current-sheet-info">
-            <span className="sheet-label">Using Sheet #:</span>
-            <span className="sheet-number-badge">{currentEntry.sheetNumber}</span>
-            <small>for all entries this month</small>
-          </div>
-        )}
       </div>
+
+      {/* Success Message Bubble */}
+      {successMessage && (
+        <div className="success-bubble">
+          <span className="success-icon">✓</span>
+          <span className="success-text">{successMessage}</span>
+        </div>
+      )}
 
       {/* Monthly Sheet Display */}
       <div className="monthly-sheet-section">
@@ -481,7 +469,6 @@ function AttendanceForm() {
                   <th>Guests</th>
                   <th>Total</th>
                   <th>Offerings</th>
-                  <th>Notes</th>
                   <th>Action</th>
                 </tr>
               </thead>
@@ -505,7 +492,6 @@ function AttendanceForm() {
                     <td className="offerings-cell">
                       {entry.offerings ? parseFloat(entry.offerings).toFixed(2) : '0.00'}
                     </td>
-                    <td className="notes-cell">{entry.notes}</td>
                     <td className="action-cell">
                       <button
                         type="button"
@@ -539,7 +525,7 @@ function AttendanceForm() {
                   <td className="total-offerings">
                     <strong>{monthlyTotals.totalOfferings.toFixed(2)}</strong>
                   </td>
-                  <td colSpan="2">
+                  <td colSpan="1">
                     <small>{monthlyEntries.length} services</small>
                   </td>
                 </tr>
@@ -552,6 +538,28 @@ function AttendanceForm() {
             <p>No entries added yet. Add service data above to populate the monthly sheet.</p>
           </div>
         )}
+      </div>
+
+      {/* Monthly Notes Section */}
+      <div className="notes-section">
+        <h3 className="section-title">
+          <span className="section-number">📝</span>
+          Monthly Notes
+        </h3>
+        <div className="notes-container">
+          <textarea
+            id="monthlyNotes"
+            name="monthlyNotes"
+            value={monthlyNotes}
+            onChange={(e) => setMonthlyNotes(e.target.value)}
+            placeholder="Add any notes for this month's submissions (optional)..."
+            rows="4"
+            className="notes-textarea"
+          />
+          <div className="notes-hint">
+            <small>These notes will be included in the email submission</small>
+          </div>
+        </div>
       </div>
 
       {/* Submission Section */}
@@ -627,7 +635,7 @@ function AttendanceForm() {
             <ul>
               <li>Complete monthly data will be formatted as a report</li>
               <li>Sent to the designated email address</li>
-              <li>Includes all entries and calculated totals</li>
+              <li>Includes all entries, totals, and notes</li>
               <li>You'll receive a confirmation</li>
             </ul>
           </div>
