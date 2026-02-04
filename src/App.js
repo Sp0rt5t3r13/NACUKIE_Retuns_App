@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
+import ReturnsForm from './components/ReturnsForm';
 import { 
   auth, 
   createUserWithEmailAndPassword, 
@@ -136,7 +137,9 @@ function App() {
               <h2>Welcome to Returns Management</h2>
               <p className="subtitle">Efficient document processing for NACUKIE returns</p>
             </div>
-            
+
+            <ReturnsForm />
+
             <div className="app-description">
               <p>This app helps you manage return documents by:</p>
               <ul className="features-list">
