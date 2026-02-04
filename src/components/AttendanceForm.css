@@ -1,0 +1,646 @@
+/* AttendanceForm.css - Spreadsheet Style Form */
+
+.attendance-form-container {
+  background: white;
+  border-radius: 12px;
+  padding: 30px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.form-header {
+  text-align: center;
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid #eef2f7;
+}
+
+.form-header h2 {
+  color: #2c3e50;
+  font-size: 2rem;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+}
+
+.form-header p {
+  color: #666;
+  font-size: 1.1rem;
+}
+
+/* Month/Year Selector */
+.month-year-section {
+  background: linear-gradient(135deg, #f8fafc 0%, #eef2f7 100%);
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 30px;
+  border-left: 4px solid #3498db;
+}
+
+.month-year-selector {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.selector-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.selector-group label {
+  font-weight: 600;
+  color: #2c3e50;
+  font-size: 0.95rem;
+}
+
+.selector-group select,
+.selector-group input {
+  padding: 10px 14px;
+  border: 2px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: 1rem;
+  min-width: 150px;
+}
+
+.current-month {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.month-label {
+  color: #666;
+  font-size: 0.95rem;
+}
+
+.month-display {
+  background: white;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-weight: 600;
+  color: #2c3e50;
+  border: 2px solid #3498db;
+}
+
+/* Section Title */
+.section-title {
+  color: #2c3e50;
+  font-size: 1.4rem;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.section-number {
+  background: #3498db;
+  color: white;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+/* Entry Form - Grid Layout */
+.entry-form-section {
+  background: #f8fafc;
+  padding: 25px;
+  border-radius: 10px;
+  margin-bottom: 30px;
+}
+
+.entry-form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 15px;
+  align-items: end;
+}
+
+.form-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-cell.wide-cell {
+  grid-column: span 2;
+}
+
+.form-cell.action-cell {
+  align-self: flex-end;
+}
+
+.form-cell label {
+  font-weight: 600;
+  color: #2c3e50;
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+.form-cell small {
+  color: #666;
+  font-size: 0.8rem;
+  display: block;
+}
+
+/* Input Styles */
+input, select {
+  padding: 12px;
+  border: 2px solid #e0e6ed;
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: all 0.2s;
+  background: white;
+}
+
+input:focus, select:focus {
+  outline: none;
+  border-color: #3498db;
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+input::placeholder {
+  color: #94a3b8;
+}
+
+/* Special Input Styling */
+.sheet-number-input {
+  text-align: center;
+  font-weight: bold;
+  font-family: 'Courier New', monospace;
+}
+
+.service-type-select {
+  text-align: center;
+  font-weight: bold;
+  background: white;
+}
+
+.notes-input {
+  width: 100%;
+}
+
+/* Add Button */
+.add-entry-btn {
+  padding: 14px 20px;
+  background: linear-gradient(135deg, #27ae60 0%, #219653 100%);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-size: 1rem;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.add-entry-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(39, 174, 96, 0.3);
+}
+
+.add-entry-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Monthly Sheet Section */
+.monthly-sheet-section {
+  margin-bottom: 40px;
+}
+
+.sheet-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.entry-count {
+  background: #e8f4fc;
+  color: #3498db;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  margin-left: 10px;
+}
+
+.clear-sheet-btn {
+  padding: 10px 20px;
+  background: #fee2e2;
+  color: #dc2626;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.clear-sheet-btn:hover {
+  background: #fecaca;
+}
+
+/* Spreadsheet Table */
+.sheet-table-container {
+  overflow-x: auto;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  background: white;
+}
+
+.sheet-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 800px;
+}
+
+.sheet-table th {
+  background: #f1f5f9;
+  padding: 14px 12px;
+  text-align: left;
+  font-weight: 600;
+  color: #2c3e50;
+  border-bottom: 2px solid #e2e8f0;
+  font-size: 0.95rem;
+  white-space: nowrap;
+}
+
+.sheet-table td {
+  padding: 12px;
+  border-bottom: 1px solid #eef2f7;
+  vertical-align: middle;
+}
+
+.sheet-table tbody tr:hover {
+  background: #f8fafc;
+}
+
+/* Cell Styling */
+.sheet-number-cell {
+  font-family: 'Courier New', monospace;
+  font-weight: bold;
+  text-align: center;
+  background: #f0f9ff;
+  color: #0369a1;
+}
+
+.date-cell {
+  text-align: center;
+  font-weight: 600;
+}
+
+.service-cell {
+  text-align: center;
+}
+
+.service-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 4px;
+  font-weight: bold;
+  font-size: 0.9rem;
+  min-width: 24px;
+  text-align: center;
+}
+
+.service-badge.sunday {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.service-badge.midweek {
+  background: #f3e8ff;
+  color: #7e22ce;
+}
+
+.members-cell,
+.guests-cell {
+  text-align: center;
+  font-family: 'Courier New', monospace;
+}
+
+.total-cell {
+  text-align: center;
+}
+
+.total-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  background: #dcfce7;
+  color: #166534;
+  border-radius: 4px;
+  font-weight: bold;
+  font-size: 0.9rem;
+  min-width: 30px;
+}
+
+.offerings-cell {
+  text-align: right;
+  font-family: 'Courier New', monospace;
+  font-weight: 500;
+}
+
+.notes-cell {
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.remove-row-btn {
+  background: none;
+  border: none;
+  color: #dc2626;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 4px;
+  transition: all 0.2s;
+  font-size: 1rem;
+}
+
+.remove-row-btn:hover {
+  background: #fee2e2;
+  transform: scale(1.1);
+}
+
+/* Totals Row */
+.totals-row {
+  background: #f0f9ff;
+  border-top: 2px solid #3498db;
+}
+
+.totals-row td {
+  padding: 16px 12px;
+  font-weight: 600;
+}
+
+.totals-label {
+  color: #2c3e50;
+}
+
+.total-members,
+.total-guests {
+  text-align: center;
+  color: #1e40af;
+}
+
+.grand-total {
+  text-align: center;
+}
+
+.grand-total-number {
+  background: #3498db;
+  color: white;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 1.1rem;
+}
+
+.total-offerings {
+  text-align: right;
+  color: #166534;
+  font-size: 1.1rem;
+}
+
+/* Empty Sheet State */
+.empty-sheet {
+  text-align: center;
+  padding: 60px 40px;
+  background: #f8fafc;
+  border-radius: 10px;
+  border: 2px dashed #cbd5e1;
+}
+
+.empty-sheet-icon {
+  font-size: 3rem;
+  margin-bottom: 20px;
+  opacity: 0.5;
+}
+
+.empty-sheet p {
+  color: #666;
+  font-size: 1.1rem;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+/* Submission Section */
+.submission-section {
+  background: linear-gradient(135deg, #f8fafc 0%, #eef2f7 100%);
+  padding: 30px;
+  border-radius: 10px;
+  border-top: 4px solid #27ae60;
+}
+
+.submission-summary {
+  margin-bottom: 30px;
+}
+
+.submission-summary h4 {
+  color: #2c3e50;
+  margin-bottom: 20px;
+  font-size: 1.3rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.summary-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+.summary-card {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  border: 1px solid #e2e8f0;
+}
+
+.card-icon {
+  font-size: 2rem;
+  opacity: 0.8;
+}
+
+.card-content {
+  flex: 1;
+}
+
+.card-label {
+  color: #666;
+  font-size: 0.9rem;
+  margin-bottom: 4px;
+}
+
+.card-value {
+  color: #2c3e50;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+/* Submission Actions */
+.submission-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.submit-monthly-btn {
+  padding: 20px 40px;
+  background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+}
+
+.submit-monthly-btn:hover:not(:disabled) {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(52, 152, 219, 0.3);
+}
+
+.submit-monthly-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.submission-note {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  border-left: 4px solid #27ae60;
+}
+
+.submission-note p {
+  color: #2c3e50;
+  margin-bottom: 15px;
+  font-weight: 600;
+}
+
+.submission-note ul {
+  padding-left: 25px;
+  color: #666;
+}
+
+.submission-note li {
+  margin-bottom: 8px;
+  padding-left: 10px;
+}
+
+/* Spinner */
+.spinner-small {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: white;
+  animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Submit Messages */
+.submit-message {
+  padding: 16px 20px;
+  border-radius: 8px;
+  margin-bottom: 25px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.submit-message.success {
+  background: #d1fae5;
+  color: #065f46;
+  border-left: 4px solid #10b981;
+}
+
+.submit-message.error {
+  background: #fee2e2;
+  color: #7f1d1d;
+  border-left: 4px solid #ef4444;
+}
+
+.submit-message.info {
+  background: #dbeafe;
+  color: #1e40af;
+  border-left: 4px solid #3b82f6;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .attendance-form-container {
+    padding: 20px;
+  }
+  
+  .month-year-selector {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 15px;
+  }
+  
+  .current-month {
+    margin-left: 0;
+    justify-content: center;
+  }
+  
+  .entry-form-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .form-cell.wide-cell {
+    grid-column: span 2;
+  }
+  
+  .sheet-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .summary-cards {
+    grid-template-columns: 1fr;
+  }
+  
+  .submit-monthly-btn {
+    padding: 16px 20px;
+    font-size: 1.1rem;
+  }
+}

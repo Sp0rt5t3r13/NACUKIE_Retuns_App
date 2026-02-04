@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
-import ReturnsForm from './components/ReturnsForm';
+import AttendanceForm from './components/AttendanceForm';
 import { 
   auth, 
   createUserWithEmailAndPassword, 
@@ -134,11 +134,11 @@ function App() {
         <main>
           <div className="dashboard">
             <div className="dashboard-header">
-              <h2>📊 NACUKIE Attendance & Offering System</h2>
-              <p className="subtitle">Record and submit service data with supporting documents</p>
+              <h2>📊 NACUKIE Monthly Attendance System</h2>
+              <p className="subtitle">Collect and submit monthly service data in spreadsheet format</p>
             </div>
-
-            <ReturnsForm />
+              
+            <AttendanceForm />
 
             <div className="app-description">
               <p>This app helps you manage return documents by:</p>

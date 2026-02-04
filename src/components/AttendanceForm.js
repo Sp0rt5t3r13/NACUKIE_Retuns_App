@@ -1,0 +1,540 @@
+import React, { useState } from 'react';
+import './AttendanceForm.css';
+
+function AttendanceForm() {
+  // Current entry state
+  const [currentEntry, setCurrentEntry] = useState({
+    sheetNumber: '',
+    date: '',
+    month: new Date().getMonth() + 1, // Current month (1-12)
+    year: new Date().getFullYear(),
+    serviceType: 'S', // S for Sunday, M for Midweek
+    members: '',
+    guests: '',
+    offerings: '',
+    notes: ''
+  });
+
+  // All entries for the month (like a spreadsheet)
+  const [monthlyEntries, setMonthlyEntries] = useState([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitMessage, setSubmitMessage] = useState('');
+
+  // Handle input changes for current entry
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    
+    if (name === 'sheetNumber') {
+      // Ensure 3 digits max
+      if (value === '' || (/^\d{0,3}$/.test(value))) {
+        setCurrentEntry({
+          ...currentEntry,
+          [name]: value
+        });
+      }
+    } else if (name === 'date') {
+      // Ensure valid day (1-31)
+      if (value === '' || (/^\d{0,2}$/.test(value) && (value === '' || (parseInt(value) >= 1 && parseInt(value) <= 31)))) {
+        setCurrentEntry({
+          ...currentEntry,
+          [name]: value
+        });
+      }
+    } else if (name === 'members' || name === 'guests') {
+      // Allow numbers only
+      if (value === '' || /^\d+$/.test(value)) {
+        setCurrentEntry({
+          ...currentEntry,
+          [name]: value
+        });
+      }
+    } else if (name === 'offerings') {
+      // Allow numbers and one decimal point
+      if (value === '' || /^\d*\.?\d{0,2}$/.test(value)) {
+        setCurrentEntry({
+          ...currentEntry,
+          [name]: value
+        });
+      }
+    } else {
+      setCurrentEntry({
+        ...currentEntry,
+        [name]: value
+      });
+    }
+  };
+
+  // Add current entry to monthly sheet
+  const addToMonthlySheet = () => {
+    // Validate required fields
+    if (!currentEntry.sheetNumber || currentEntry.sheetNumber.length !== 3) {
+      setSubmitMessage({ type: 'error', text: 'Sheet Number must be 3 digits' });
+      return;
+    }
+
+    if (!currentEntry.date) {
+      setSubmitMessage({ type: 'error', text: 'Date is required' });
+      return;
+    }
+
+    if (!currentEntry.serviceType) {
+      setSubmitMessage({ type: 'error', text: 'Service Type is required' });
+      return;
+    }
+
+    // Check if sheet number already exists
+    if (monthlyEntries.some(entry => entry.sheetNumber === currentEntry.sheetNumber)) {
+      setSubmitMessage({ type: 'error', text: `Sheet Number ${currentEntry.sheetNumber} already exists` });
+      return;
+    }
+
+    // Add to monthly entries
+    const newEntry = {
+      ...currentEntry,
+      id: Date.now(), // Unique ID for each entry
+      totalAttendance: (parseInt(currentEntry.members) || 0) + (parseInt(currentEntry.guests) || 0)
+    };
+
+    setMonthlyEntries([...monthlyEntries, newEntry]);
+    
+    // Reset current entry (keep month/year)
+    setCurrentEntry({
+      sheetNumber: '',
+      date: '',
+      month: currentEntry.month,
+      year: currentEntry.year,
+      serviceType: 'S',
+      members: '',
+      guests: '',
+      offerings: '',
+      notes: ''
+    });
+
+    setSubmitMessage({ type: 'success', text: `Entry ${currentEntry.sheetNumber} added to monthly sheet` });
+  };
+
+  // Remove entry from monthly sheet
+  const removeEntry = (id) => {
+    setMonthlyEntries(monthlyEntries.filter(entry => entry.id !== id));
+  };
+
+  // Calculate monthly totals
+  const calculateMonthlyTotals = () => {
+    const totals = monthlyEntries.reduce((acc, entry) => {
+      acc.totalMembers += parseInt(entry.members) || 0;
+      acc.totalGuests += parseInt(entry.guests) || 0;
+      acc.totalOfferings += parseFloat(entry.offerings) || 0;
+      acc.totalEntries++;
+      return acc;
+    }, {
+      totalMembers: 0,
+      totalGuests: 0,
+      totalOfferings: 0,
+      totalEntries: 0
+    });
+
+    totals.totalAttendance = totals.totalMembers + totals.totalGuests;
+    return totals;
+  };
+
+  const monthlyTotals = calculateMonthlyTotals();
+
+  // Handle final submission
+  const handleSubmitMonthlySheet = async () => {
+    if (monthlyEntries.length === 0) {
+      setSubmitMessage({ type: 'error', text: 'No entries to submit' });
+      return;
+    }
+
+    setIsSubmitting(true);
+    setSubmitMessage({ type: 'info', text: 'Submitting monthly data...' });
+
+    // Simulate API call
+    setTimeout(() => {
+      const submissionData = {
+        month: currentEntry.month,
+        year: currentEntry.year,
+        entries: monthlyEntries,
+        totals: monthlyTotals,
+        submittedAt: new Date().toISOString()
+      };
+
+      console.log('Monthly Submission Data:', submissionData);
+      
+      setSubmitMessage({ 
+        type: 'success', 
+        text: `Monthly sheet submitted successfully! ${monthlyEntries.length} entries sent to email.` 
+      });
+      setIsSubmitting(false);
+
+      // Clear after successful submission
+      setMonthlyEntries([]);
+    }, 3000);
+  };
+
+  // Month names for display
+  const monthNames = [
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'
+  ];
+
+  return (
+    <div className="attendance-form-container">
+      <div className="form-header">
+        <h2>📅 Monthly Attendance & Offering Sheet</h2>
+        <p>Collect and submit monthly service data in sheet format</p>
+      </div>
+
+      {submitMessage && (
+        <div className={`submit-message ${submitMessage.type}`}>
+          {submitMessage.type === 'success' ? '✅' : 
+           submitMessage.type === 'error' ? '⚠️' : 'ℹ️'} {submitMessage.text}
+        </div>
+      )}
+
+      {/* Month/Year Selection */}
+      <div className="month-year-section">
+        <div className="month-year-selector">
+          <div className="selector-group">
+            <label htmlFor="month">Month:</label>
+            <select
+              id="month"
+              name="month"
+              value={currentEntry.month}
+              onChange={handleInputChange}
+            >
+              {monthNames.map((month, index) => (
+                <option key={index} value={index + 1}>
+                  {month}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="selector-group">
+            <label htmlFor="year">Year:</label>
+            <input
+              type="number"
+              id="year"
+              name="year"
+              value={currentEntry.year}
+              onChange={handleInputChange}
+              min="2000"
+              max="2100"
+            />
+          </div>
+          <div className="current-month">
+            <span className="month-label">Current Sheet:</span>
+            <span className="month-display">
+              {monthNames[currentEntry.month - 1]} {currentEntry.year}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* Entry Form - Single Row */}
+      <div className="entry-form-section">
+        <h3 className="section-title">
+          <span className="section-number">1</span>
+          Add New Service Entry
+        </h3>
+        
+        <div className="entry-form-grid">
+          {/* Sheet Number */}
+          <div className="form-cell">
+            <label htmlFor="sheetNumber">Sheet #</label>
+            <input
+              type="text"
+              id="sheetNumber"
+              name="sheetNumber"
+              value={currentEntry.sheetNumber}
+              onChange={handleInputChange}
+              placeholder="001"
+              maxLength="3"
+              className="sheet-number-input"
+            />
+            <small>3 digits</small>
+          </div>
+
+          {/* Date */}
+          <div className="form-cell">
+            <label htmlFor="date">Date</label>
+            <input
+              type="number"
+              id="date"
+              name="date"
+              value={currentEntry.date}
+              onChange={handleInputChange}
+              placeholder="1-31"
+              min="1"
+              max="31"
+            />
+            <small>Day of month</small>
+          </div>
+
+          {/* Service Type */}
+          <div className="form-cell">
+            <label htmlFor="serviceType">Service</label>
+            <select
+              id="serviceType"
+              name="serviceType"
+              value={currentEntry.serviceType}
+              onChange={handleInputChange}
+              className="service-type-select"
+            >
+              <option value="S">S (Sunday)</option>
+              <option value="M">M (Midweek)</option>
+            </select>
+          </div>
+
+          {/* Members */}
+          <div className="form-cell">
+            <label htmlFor="members">Members</label>
+            <input
+              type="number"
+              id="members"
+              name="members"
+              value={currentEntry.members}
+              onChange={handleInputChange}
+              placeholder="0"
+              min="0"
+            />
+          </div>
+
+          {/* Guests */}
+          <div className="form-cell">
+            <label htmlFor="guests">Guests</label>
+            <input
+              type="number"
+              id="guests"
+              name="guests"
+              value={currentEntry.guests}
+              onChange={handleInputChange}
+              placeholder="0"
+              min="0"
+            />
+          </div>
+
+          {/* Offerings */}
+          <div className="form-cell">
+            <label htmlFor="offerings">Offerings</label>
+            <input
+              type="text"
+              id="offerings"
+              name="offerings"
+              value={currentEntry.offerings}
+              onChange={handleInputChange}
+              placeholder="0.00"
+            />
+            <small>Amount</small>
+          </div>
+
+          {/* Notes */}
+          <div className="form-cell wide-cell">
+            <label htmlFor="notes">Notes</label>
+            <input
+              type="text"
+              id="notes"
+              name="notes"
+              value={currentEntry.notes}
+              onChange={handleInputChange}
+              placeholder="Optional notes..."
+              className="notes-input"
+            />
+          </div>
+
+          {/* Add Button */}
+          <div className="form-cell action-cell">
+            <button
+              type="button"
+              className="add-entry-btn"
+              onClick={addToMonthlySheet}
+              disabled={isSubmitting}
+            >
+              ➕ Add to Sheet
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Monthly Sheet Display - Like a Spreadsheet */}
+      <div className="monthly-sheet-section">
+        <div className="sheet-header">
+          <h3 className="section-title">
+            <span className="section-number">2</span>
+            Monthly Sheet - {monthNames[currentEntry.month - 1]} {currentEntry.year}
+            <span className="entry-count">({monthlyEntries.length} entries)</span>
+          </h3>
+          
+          {monthlyEntries.length > 0 && (
+            <button
+              type="button"
+              className="clear-sheet-btn"
+              onClick={() => {
+                if (window.confirm('Clear entire monthly sheet? This cannot be undone.')) {
+                  setMonthlyEntries([]);
+                }
+              }}
+            >
+              🗑️ Clear Sheet
+            </button>
+          )}
+        </div>
+
+        {/* Spreadsheet-like Table */}
+        {monthlyEntries.length > 0 ? (
+          <div className="sheet-table-container">
+            <table className="sheet-table">
+              <thead>
+                <tr>
+                  <th>Sheet #</th>
+                  <th>Date</th>
+                  <th>Service</th>
+                  <th>Members</th>
+                  <th>Guests</th>
+                  <th>Total</th>
+                  <th>Offerings</th>
+                  <th>Notes</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {monthlyEntries.map((entry) => (
+                  <tr key={entry.id}>
+                    <td className="sheet-number-cell">{entry.sheetNumber}</td>
+                    <td className="date-cell">{entry.date}</td>
+                    <td className="service-cell">
+                      <span className={`service-badge ${entry.serviceType === 'S' ? 'sunday' : 'midweek'}`}>
+                        {entry.serviceType}
+                      </span>
+                    </td>
+                    <td className="members-cell">{entry.members || '0'}</td>
+                    <td className="guests-cell">{entry.guests || '0'}</td>
+                    <td className="total-cell">
+                      <span className="total-badge">
+                        {(parseInt(entry.members) || 0) + (parseInt(entry.guests) || 0)}
+                      </span>
+                    </td>
+                    <td className="offerings-cell">
+                      {entry.offerings ? parseFloat(entry.offerings).toFixed(2) : '0.00'}
+                    </td>
+                    <td className="notes-cell">{entry.notes}</td>
+                    <td className="action-cell">
+                      <button
+                        type="button"
+                        className="remove-row-btn"
+                        onClick={() => removeEntry(entry.id)}
+                        title="Remove this entry"
+                      >
+                        ❌
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+              {/* Monthly Totals Row */}
+              <tfoot>
+                <tr className="totals-row">
+                  <td colSpan="3" className="totals-label">
+                    <strong>Monthly Totals:</strong>
+                  </td>
+                  <td className="total-members">
+                    <strong>{monthlyTotals.totalMembers}</strong>
+                  </td>
+                  <td className="total-guests">
+                    <strong>{monthlyTotals.totalGuests}</strong>
+                  </td>
+                  <td className="grand-total">
+                    <strong className="grand-total-number">
+                      {monthlyTotals.totalAttendance}
+                    </strong>
+                  </td>
+                  <td className="total-offerings">
+                    <strong>{monthlyTotals.totalOfferings.toFixed(2)}</strong>
+                  </td>
+                  <td colSpan="2">
+                    <small>{monthlyEntries.length} services</small>
+                  </td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        ) : (
+          <div className="empty-sheet">
+            <div className="empty-sheet-icon">📋</div>
+            <p>No entries added yet. Add service data above to populate the monthly sheet.</p>
+          </div>
+        )}
+      </div>
+
+      {/* Submission Section */}
+      <div className="submission-section">
+        <div className="submission-summary">
+          <h4>📊 Submission Summary</h4>
+          <div className="summary-cards">
+            <div className="summary-card">
+              <div className="card-icon">📅</div>
+              <div className="card-content">
+                <div className="card-label">Month</div>
+                <div className="card-value">{monthNames[currentEntry.month - 1]} {currentEntry.year}</div>
+              </div>
+            </div>
+            
+            <div className="summary-card">
+              <div className="card-icon">📝</div>
+              <div className="card-content">
+                <div className="card-label">Entries</div>
+                <div className="card-value">{monthlyEntries.length} services</div>
+              </div>
+            </div>
+            
+            <div className="summary-card">
+              <div className="card-icon">👥</div>
+              <div className="card-content">
+                <div className="card-label">Total Attendance</div>
+                <div className="card-value">{monthlyTotals.totalAttendance} people</div>
+              </div>
+            </div>
+            
+            <div className="summary-card">
+              <div className="card-icon">💰</div>
+              <div className="card-content">
+                <div className="card-label">Total Offerings</div>
+                <div className="card-value">{monthlyTotals.totalOfferings.toFixed(2)}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="submission-actions">
+          <button
+            type="button"
+            className="submit-monthly-btn"
+            onClick={handleSubmitMonthlySheet}
+            disabled={isSubmitting || monthlyEntries.length === 0}
+          >
+            {isSubmitting ? (
+              <>
+                <span className="spinner-small"></span>
+                Sending Monthly Report...
+              </>
+            ) : (
+              '📧 Submit Monthly Sheet'
+            )}
+          </button>
+          
+          <div className="submission-note">
+            <p>✅ <strong>Email Submission:</strong></p>
+            <ul>
+              <li>Complete monthly data will be formatted as a report</li>
+              <li>Sent to the designated email address</li>
+              <li>Includes all entries and calculated totals</li>
+              <li>You'll receive a confirmation</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default AttendanceForm;
