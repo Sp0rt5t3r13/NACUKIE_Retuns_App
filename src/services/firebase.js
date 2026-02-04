@@ -9,12 +9,12 @@ import {
 
 // NACUKIE Returns App Firebase Configuration
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY_HERE",
-  authDomain: "YOUR_AUTH_DOMAIN_HERE",
-  projectId: "YOUR_PROJECT_ID_HERE",
-  storageBucket: "YOUR_STORAGE_BUCKET_HERE",
-  messagingSenderId: "YOUR_SENDER_ID_HERE",
-  appId: "YOUR_APP_ID_HERE"
+  apiKey: "AIzaSyBfEjBsDJIPOK4-ghg65WDe2Tzv5KaXr0k",
+  authDomain: "nacukie-returns-app.firebaseapp.com",
+  projectId: "nacukie-returns-app",
+  storageBucket: "nacukie-returns-app.firebasestorage.app",
+  messagingSenderId: "142372165759",
+  appId: "1:142372165759:web:4bc6c0370c976fc6a7074a"
 };
 
 // Initialize Firebase
