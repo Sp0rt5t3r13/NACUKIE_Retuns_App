@@ -2,6 +2,12 @@ import React, { useState } from 'react';
 import './AttendanceForm.css';
 
 function AttendanceForm() {
+  // District and Congregation data
+  const [locationData, setLocationData] = useState({
+    district: '',
+    congregation: ''
+  });
+
   // Current entry state
   const [currentEntry, setCurrentEntry] = useState({
     sheetNumber: '',
@@ -15,10 +21,19 @@ function AttendanceForm() {
     notes: ''
   });
 
-  // All entries for the month (like a spreadsheet)
+  // All entries for the month
   const [monthlyEntries, setMonthlyEntries] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitMessage, setSubmitMessage] = useState('');
+
+  // Handle district/congregation changes
+  const handleLocationChange = (e) => {
+    const { name, value } = e.target;
+    setLocationData({
+      ...locationData,
+      [name]: value
+    });
+  };
 
   // Handle input changes for current entry
   const handleInputChange = (e) => {
@@ -66,9 +81,15 @@ function AttendanceForm() {
 
   // Add current entry to monthly sheet
   const addToMonthlySheet = () => {
+    // Validate location data
+    if (!locationData.district || !locationData.congregation) {
+      setSubmitMessage({ type: 'error', text: 'Please enter District and Congregation' });
+      return;
+    }
+
     // Validate required fields
     if (!currentEntry.sheetNumber || currentEntry.sheetNumber.length !== 3) {
-      setSubmitMessage({ type: 'error', text: 'Sheet Number must be 3 digits' });
+      setSubmitMessage({ type: 'error', text: 'Sheet Number must be 3 digits (001-999)' });
       return;
     }
 
@@ -82,35 +103,34 @@ function AttendanceForm() {
       return;
     }
 
-    // Check if sheet number already exists
-    if (monthlyEntries.some(entry => entry.sheetNumber === currentEntry.sheetNumber)) {
-      setSubmitMessage({ type: 'error', text: `Sheet Number ${currentEntry.sheetNumber} already exists` });
-      return;
-    }
-
     // Add to monthly entries
     const newEntry = {
       ...currentEntry,
+      ...locationData, // Include district and congregation
       id: Date.now(), // Unique ID for each entry
-      totalAttendance: (parseInt(currentEntry.members) || 0) + (parseInt(currentEntry.guests) || 0)
+      totalAttendance: (parseInt(currentEntry.members) || 0) + (parseInt(currentEntry.guests) || 0),
+      timestamp: new Date().toISOString()
     };
 
     setMonthlyEntries([...monthlyEntries, newEntry]);
     
-    // Reset current entry (keep month/year)
-    setCurrentEntry({
-      sheetNumber: '',
+    // Reset current entry (keep month/year and location)
+    setCurrentEntry(prev => ({
+      sheetNumber: prev.sheetNumber, // Keep same sheet number for month
       date: '',
-      month: currentEntry.month,
-      year: currentEntry.year,
+      month: prev.month,
+      year: prev.year,
       serviceType: 'S',
       members: '',
       guests: '',
       offerings: '',
       notes: ''
-    });
+    }));
 
-    setSubmitMessage({ type: 'success', text: `Entry ${currentEntry.sheetNumber} added to monthly sheet` });
+    setSubmitMessage({ 
+      type: 'success', 
+      text: `Entry added for Day ${currentEntry.date}` 
+    });
   };
 
   // Remove entry from monthly sheet
@@ -146,12 +166,18 @@ function AttendanceForm() {
       return;
     }
 
+    if (!locationData.district || !locationData.congregation) {
+      setSubmitMessage({ type: 'error', text: 'Please enter District and Congregation before submitting' });
+      return;
+    }
+
     setIsSubmitting(true);
     setSubmitMessage({ type: 'info', text: 'Submitting monthly data...' });
 
     // Simulate API call
     setTimeout(() => {
       const submissionData = {
+        ...locationData,
         month: currentEntry.month,
         year: currentEntry.year,
         entries: monthlyEntries,
@@ -163,11 +189,11 @@ function AttendanceForm() {
       
       setSubmitMessage({ 
         type: 'success', 
-        text: `Monthly sheet submitted successfully! ${monthlyEntries.length} entries sent to email.` 
+        text: `Monthly sheet submitted! ${monthlyEntries.length} entries sent for ${locationData.district} - ${locationData.congregation}` 
       });
       setIsSubmitting(false);
 
-      // Clear after successful submission
+      // Clear after successful submission (keep location data)
       setMonthlyEntries([]);
     }, 3000);
   };
@@ -177,6 +203,9 @@ function AttendanceForm() {
     'January', 'February', 'March', 'April', 'May', 'June',
     'July', 'August', 'September', 'October', 'November', 'December'
   ];
+
+  // Get unique sheet numbers used
+  const uniqueSheetNumbers = [...new Set(monthlyEntries.map(entry => entry.sheetNumber))];
 
   return (
     <div className="attendance-form-container">
@@ -192,11 +221,54 @@ function AttendanceForm() {
         </div>
       )}
 
+      {/* Location Information */}
+      <div className="location-section">
+        <h3 className="section-title">
+          <span className="section-number">📍</span>
+          Location Information
+        </h3>
+        <div className="location-form-grid">
+          <div className="location-cell">
+            <label htmlFor="district">District *</label>
+            <input
+              type="text"
+              id="district"
+              name="district"
+              value={locationData.district}
+              onChange={handleLocationChange}
+              placeholder="e.g., North District"
+              required
+            />
+          </div>
+
+          <div className="location-cell">
+            <label htmlFor="congregation">Congregation *</label>
+            <input
+              type="text"
+              id="congregation"
+              name="congregation"
+              value={locationData.congregation}
+              onChange={handleLocationChange}
+              placeholder="e.g., Central Church"
+              required
+            />
+          </div>
+
+          <div className="location-cell month-display-cell">
+            <div className="month-year-display">
+              <span className="month-label">{monthNames[currentEntry.month - 1]}</span>
+              <span className="year-label">{currentEntry.year}</span>
+            </div>
+            <small>Current Month</small>
+          </div>
+        </div>
+      </div>
+
       {/* Month/Year Selection */}
       <div className="month-year-section">
-        <div className="month-year-selector">
-          <div className="selector-group">
-            <label htmlFor="month">Month:</label>
+        <div className="month-year-grid">
+          <div className="month-year-cell">
+            <label htmlFor="month">Select Month:</label>
             <select
               id="month"
               name="month"
@@ -210,8 +282,9 @@ function AttendanceForm() {
               ))}
             </select>
           </div>
-          <div className="selector-group">
-            <label htmlFor="year">Year:</label>
+
+          <div className="month-year-cell">
+            <label htmlFor="year">Select Year:</label>
             <input
               type="number"
               id="year"
@@ -222,11 +295,22 @@ function AttendanceForm() {
               max="2100"
             />
           </div>
-          <div className="current-month">
-            <span className="month-label">Current Sheet:</span>
-            <span className="month-display">
-              {monthNames[currentEntry.month - 1]} {currentEntry.year}
-            </span>
+
+          <div className="month-year-cell sheet-number-cell">
+            <label htmlFor="sheetNumber">Sheet # for Month:</label>
+            <div className="sheet-number-input-container">
+              <input
+                type="text"
+                id="sheetNumber"
+                name="sheetNumber"
+                value={currentEntry.sheetNumber}
+                onChange={handleInputChange}
+                placeholder="001"
+                maxLength="3"
+                className="sheet-number-input"
+              />
+              <small>3-digit sheet number for this month</small>
+            </div>
           </div>
         </div>
       </div>
@@ -238,25 +322,9 @@ function AttendanceForm() {
           Add New Service Entry
         </h3>
         
-        <div className="entry-form-grid">
-          {/* Sheet Number */}
-          <div className="form-cell">
-            <label htmlFor="sheetNumber">Sheet #</label>
-            <input
-              type="text"
-              id="sheetNumber"
-              name="sheetNumber"
-              value={currentEntry.sheetNumber}
-              onChange={handleInputChange}
-              placeholder="001"
-              maxLength="3"
-              className="sheet-number-input"
-            />
-            <small>3 digits</small>
-          </div>
-
+        <div className="entry-form-row">
           {/* Date */}
-          <div className="form-cell">
+          <div className="form-field">
             <label htmlFor="date">Date</label>
             <input
               type="number"
@@ -267,12 +335,13 @@ function AttendanceForm() {
               placeholder="1-31"
               min="1"
               max="31"
+              className="date-input"
             />
-            <small>Day of month</small>
+            <small>Day</small>
           </div>
 
           {/* Service Type */}
-          <div className="form-cell">
+          <div className="form-field">
             <label htmlFor="serviceType">Service</label>
             <select
               id="serviceType"
@@ -287,7 +356,7 @@ function AttendanceForm() {
           </div>
 
           {/* Members */}
-          <div className="form-cell">
+          <div className="form-field">
             <label htmlFor="members">Members</label>
             <input
               type="number"
@@ -297,11 +366,12 @@ function AttendanceForm() {
               onChange={handleInputChange}
               placeholder="0"
               min="0"
+              className="members-input"
             />
           </div>
 
           {/* Guests */}
-          <div className="form-cell">
+          <div className="form-field">
             <label htmlFor="guests">Guests</label>
             <input
               type="number"
@@ -311,11 +381,12 @@ function AttendanceForm() {
               onChange={handleInputChange}
               placeholder="0"
               min="0"
+              className="guests-input"
             />
           </div>
 
           {/* Offerings */}
-          <div className="form-cell">
+          <div className="form-field">
             <label htmlFor="offerings">Offerings</label>
             <input
               type="text"
@@ -324,12 +395,13 @@ function AttendanceForm() {
               value={currentEntry.offerings}
               onChange={handleInputChange}
               placeholder="0.00"
+              className="offerings-input"
             />
             <small>Amount</small>
           </div>
 
           {/* Notes */}
-          <div className="form-cell wide-cell">
+          <div className="form-field wide-field">
             <label htmlFor="notes">Notes</label>
             <input
               type="text"
@@ -343,44 +415,65 @@ function AttendanceForm() {
           </div>
 
           {/* Add Button */}
-          <div className="form-cell action-cell">
+          <div className="form-field add-button-field">
             <button
               type="button"
               className="add-entry-btn"
               onClick={addToMonthlySheet}
               disabled={isSubmitting}
+              title="Add this service entry to monthly sheet"
             >
-              ➕ Add to Sheet
+              Add
             </button>
           </div>
         </div>
+
+        {/* Sheet Number Display */}
+        {currentEntry.sheetNumber && (
+          <div className="current-sheet-info">
+            <span className="sheet-label">Using Sheet #:</span>
+            <span className="sheet-number-badge">{currentEntry.sheetNumber}</span>
+            <small>for all entries this month</small>
+          </div>
+        )}
       </div>
 
-      {/* Monthly Sheet Display - Like a Spreadsheet */}
+      {/* Monthly Sheet Display */}
       <div className="monthly-sheet-section">
         <div className="sheet-header">
-          <h3 className="section-title">
-            <span className="section-number">2</span>
-            Monthly Sheet - {monthNames[currentEntry.month - 1]} {currentEntry.year}
-            <span className="entry-count">({monthlyEntries.length} entries)</span>
-          </h3>
+          <div className="sheet-title">
+            <h3 className="section-title">
+              <span className="section-number">2</span>
+              Monthly Sheet - {monthNames[currentEntry.month - 1]} {currentEntry.year}
+            </h3>
+            <div className="sheet-info">
+              <span className="entry-count">{monthlyEntries.length} entries</span>
+              {locationData.district && locationData.congregation && (
+                <span className="location-info">
+                  {locationData.district} • {locationData.congregation}
+                </span>
+              )}
+            </div>
+          </div>
           
           {monthlyEntries.length > 0 && (
-            <button
-              type="button"
-              className="clear-sheet-btn"
-              onClick={() => {
-                if (window.confirm('Clear entire monthly sheet? This cannot be undone.')) {
-                  setMonthlyEntries([]);
-                }
-              }}
-            >
-              🗑️ Clear Sheet
-            </button>
+            <div className="sheet-actions">
+              <button
+                type="button"
+                className="clear-sheet-btn"
+                onClick={() => {
+                  if (window.confirm('Clear entire monthly sheet? This cannot be undone.')) {
+                    setMonthlyEntries([]);
+                  }
+                }}
+              >
+                🗑️ Clear Sheet
+              </button>
+            </div>
           )}
         </div>
 
-        {/* Spreadsheet-like Table */}
+        {/* Spreadsheet Table */}
         {monthlyEntries.length > 0 ? (
           <div className="sheet-table-container">
             <table className="sheet-table">
@@ -472,6 +565,18 @@ function AttendanceForm() {
           <h4>📊 Submission Summary</h4>
           <div className="summary-cards">
             <div className="summary-card">
+              <div className="card-icon">📍</div>
+              <div className="card-content">
+                <div className="card-label">Location</div>
+                <div className="card-value">
+                  {locationData.district && locationData.congregation 
+                    ? `${locationData.district} - ${locationData.congregation}`
+                    : 'Not set'}
+                </div>
+              </div>
+            </div>
+            
+            <div className="summary-card">
               <div className="card-icon">📅</div>
               <div className="card-content">
                 <div className="card-label">Month</div>
@@ -510,7 +615,7 @@ function AttendanceForm() {
             type="button"
             className="submit-monthly-btn"
             onClick={handleSubmitMonthlySheet}
-            disabled={isSubmitting || monthlyEntries.length === 0}
+            disabled={isSubmitting || monthlyEntries.length === 0 || !locationData.district || !locationData.congregation}
           >
             {isSubmitting ? (
               <>
@@ -523,7 +628,7 @@ function AttendanceForm() {
           </button>
           
           <div className="submission-note">
-            <p>✅ <strong>Email Submission:</strong></p>
+            <p>✅ <strong>Submission Process:</strong></p>
             <ul>
               <li>Complete monthly data will be formatted as a report</li>
               <li>Sent to the designated email address</li>

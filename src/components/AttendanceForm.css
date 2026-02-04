@@ -1,10 +1,13 @@
-/* AttendanceForm.css - Spreadsheet Style Form */
+/* AttendanceForm.css - Updated for Better Layout */
 
 .attendance-form-container {
   background: white;
   border-radius: 12px;
   padding: 30px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .form-header {
@@ -27,64 +30,6 @@
 .form-header p {
   color: #666;
   font-size: 1.1rem;
-}
-
-/* Month/Year Selector */
-.month-year-section {
-  background: linear-gradient(135deg, #f8fafc 0%, #eef2f7 100%);
-  padding: 20px;
-  border-radius: 10px;
-  margin-bottom: 30px;
-  border-left: 4px solid #3498db;
-}
-
-.month-year-selector {
-  display: flex;
-  align-items: center;
-  gap: 30px;
-  flex-wrap: wrap;
-}
-
-.selector-group {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.selector-group label {
-  font-weight: 600;
-  color: #2c3e50;
-  font-size: 0.95rem;
-}
-
-.selector-group select,
-.selector-group input {
-  padding: 10px 14px;
-  border: 2px solid #cbd5e1;
-  border-radius: 6px;
-  font-size: 1rem;
-  min-width: 150px;
-}
-
-.current-month {
-  margin-left: auto;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.month-label {
-  color: #666;
-  font-size: 0.95rem;
-}
-
-.month-display {
-  background: white;
-  padding: 8px 16px;
-  border-radius: 20px;
-  font-weight: 600;
-  color: #2c3e50;
-  border: 2px solid #3498db;
 }
 
 /* Section Title */
@@ -110,46 +55,167 @@
   font-size: 0.9rem;
 }
 
-/* Entry Form - Grid Layout */
-.entry-form-section {
-  background: #f8fafc;
+/* Location Section */
+.location-section {
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
   padding: 25px;
   border-radius: 10px;
-  margin-bottom: 30px;
+  margin-bottom: 25px;
+  border: 2px solid #bae6fd;
 }
 
-.entry-form-grid {
+.location-form-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-  gap: 15px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
   align-items: end;
 }
 
-.form-cell {
+.location-cell {
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
 
-.form-cell.wide-cell {
+.location-cell label {
+  font-weight: 600;
+  color: #2c3e50;
+  font-size: 0.95rem;
+}
+
+.location-cell input {
+  padding: 12px 14px;
+  border: 2px solid #7dd3fc;
+  border-radius: 6px;
+  font-size: 1rem;
+  background: white;
+  transition: all 0.2s;
+}
+
+.location-cell input:focus {
+  outline: none;
+  border-color: #0369a1;
+  box-shadow: 0 0 0 3px rgba(3, 105, 161, 0.1);
+}
+
+.month-display-cell {
+  text-align: center;
+}
+
+.month-year-display {
+  background: white;
+  padding: 15px;
+  border-radius: 8px;
+  border: 2px solid #0369a1;
+}
+
+.month-label {
+  display: block;
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: #0369a1;
+  margin-bottom: 5px;
+}
+
+.year-label {
+  display: block;
+  font-size: 1.2rem;
+  color: #666;
+}
+
+/* Month/Year Section */
+.month-year-section {
+  background: #f8fafc;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 25px;
+  border-left: 4px solid #3498db;
+}
+
+.month-year-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  align-items: end;
+}
+
+.month-year-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.month-year-cell label {
+  font-weight: 600;
+  color: #2c3e50;
+  font-size: 0.95rem;
+}
+
+.month-year-cell select,
+.month-year-cell input {
+  padding: 12px 14px;
+  border: 2px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: 1rem;
+  background: white;
+}
+
+.sheet-number-input-container {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.sheet-number-input {
+  text-align: center;
+  font-weight: bold;
+  font-family: 'Courier New', monospace;
+  font-size: 1.2rem;
+  letter-spacing: 2px;
+}
+
+/* Entry Form Section */
+.entry-form-section {
+  background: #f8fafc;
+  padding: 25px;
+  border-radius: 10px;
+  margin-bottom: 30px;
+  border: 2px solid #e2e8f0;
+}
+
+.entry-form-row {
+  display: grid;
+  grid-template-columns: 80px 100px 100px 100px 120px 1fr 100px;
+  gap: 15px;
+  align-items: end;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-field.wide-field {
   grid-column: span 2;
 }
 
-.form-cell.action-cell {
+.form-field.add-button-field {
   align-self: flex-end;
 }
 
-.form-cell label {
+.form-field label {
   font-weight: 600;
   color: #2c3e50;
   font-size: 0.9rem;
   white-space: nowrap;
 }
 
-.form-cell small {
+.form-field small {
   color: #666;
   font-size: 0.8rem;
   display: block;
+  text-align: center;
 }
 
 /* Input Styles */
@@ -160,6 +226,7 @@ input, select {
   font-size: 1rem;
   transition: all 0.2s;
   background: white;
+  width: 100%;
 }
 
 input:focus, select:focus {
@@ -173,16 +240,26 @@ input::placeholder {
 }
 
 /* Special Input Styling */
-.sheet-number-input {
+.date-input {
   text-align: center;
   font-weight: bold;
-  font-family: 'Courier New', monospace;
 }
 
 .service-type-select {
   text-align: center;
   font-weight: bold;
   background: white;
+  cursor: pointer;
+}
+
+.members-input,
+.guests-input {
+  text-align: center;
+}
+
+.offerings-input {
+  text-align: right;
+  font-family: 'Courier New', monospace;
 }
 
 .notes-input {
@@ -191,7 +268,7 @@ input::placeholder {
 
 /* Add Button */
 .add-entry-btn {
-  padding: 14px 20px;
+  padding: 12px 24px;
   background: linear-gradient(135deg, #27ae60 0%, #219653 100%);
   color: white;
   border: none;
@@ -200,7 +277,8 @@ input::placeholder {
   cursor: pointer;
   transition: all 0.3s;
   font-size: 1rem;
-  white-space: nowrap;
+  width: 100%;
+  height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -218,6 +296,32 @@ input::placeholder {
   transform: none;
 }
 
+/* Current Sheet Info */
+.current-sheet-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 15px;
+  padding: 10px 15px;
+  background: #e8f4fc;
+  border-radius: 6px;
+  border-left: 4px solid #3498db;
+}
+
+.sheet-label {
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.sheet-number-badge {
+  background: #3498db;
+  color: white;
+  padding: 4px 12px;
+  border-radius: 4px;
+  font-weight: bold;
+  font-family: 'Courier New', monospace;
+}
+
 /* Monthly Sheet Section */
 .monthly-sheet-section {
   margin-bottom: 40px;
@@ -226,19 +330,45 @@ input::placeholder {
 .sheet-header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   margin-bottom: 20px;
   flex-wrap: wrap;
   gap: 15px;
 }
 
+.sheet-title {
+  flex: 1;
+  min-width: 300px;
+}
+
+.sheet-info {
+  display: flex;
+  gap: 15px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+
 .entry-count {
   background: #e8f4fc;
   color: #3498db;
-  padding: 4px 12px;
+  padding: 6px 12px;
   border-radius: 12px;
   font-size: 0.9rem;
-  margin-left: 10px;
+  font-weight: 600;
+}
+
+.location-info {
+  background: #f0f9ff;
+  color: #0369a1;
+  padding: 6px 12px;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  border: 1px solid #bae6fd;
+}
+
+.sheet-actions {
+  display: flex;
+  gap: 10px;
 }
 
 .clear-sheet-btn {
@@ -253,6 +383,7 @@ input::placeholder {
   display: flex;
   align-items: center;
   gap: 8px;
+  white-space: nowrap;
 }
 
 .clear-sheet-btn:hover {
@@ -314,11 +445,11 @@ input::placeholder {
 
 .service-badge {
   display: inline-block;
-  padding: 4px 12px;
+  padding: 6px 12px;
   border-radius: 4px;
   font-weight: bold;
   font-size: 0.9rem;
-  min-width: 24px;
+  min-width: 30px;
   text-align: center;
 }
 
@@ -468,8 +599,8 @@ input::placeholder {
 
 .summary-cards {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 15px;
 }
 
 .summary-card {
@@ -496,151 +627,4 @@ input::placeholder {
   color: #666;
   font-size: 0.9rem;
   margin-bottom: 4px;
-}
-
-.card-value {
-  color: #2c3e50;
-  font-size: 1.2rem;
-  font-weight: 600;
-}
-
-/* Submission Actions */
-.submission-actions {
-  display: flex;
-  flex-direction: column;
-  gap: 25px;
-}
-
-.submit-monthly-btn {
-  padding: 20px 40px;
-  background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-size: 1.2rem;
-  font-weight: bold;
-  cursor: pointer;
-  transition: all 0.3s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 15px;
-}
-
-.submit-monthly-btn:hover:not(:disabled) {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 25px rgba(52, 152, 219, 0.3);
-}
-
-.submit-monthly-btn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-  transform: none;
-}
-
-.submission-note {
-  background: white;
-  padding: 20px;
-  border-radius: 8px;
-  border-left: 4px solid #27ae60;
-}
-
-.submission-note p {
-  color: #2c3e50;
-  margin-bottom: 15px;
-  font-weight: 600;
-}
-
-.submission-note ul {
-  padding-left: 25px;
-  color: #666;
-}
-
-.submission-note li {
-  margin-bottom: 8px;
-  padding-left: 10px;
-}
-
-/* Spinner */
-.spinner-small {
-  display: inline-block;
-  width: 20px;
-  height: 20px;
-  border: 3px solid rgba(255, 255, 255, 0.3);
-  border-radius: 50%;
-  border-top-color: white;
-  animation: spin 1s ease-in-out infinite;
-}
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
-
-/* Submit Messages */
-.submit-message {
-  padding: 16px 20px;
-  border-radius: 8px;
-  margin-bottom: 25px;
-  font-weight: 500;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.submit-message.success {
-  background: #d1fae5;
-  color: #065f46;
-  border-left: 4px solid #10b981;
-}
-
-.submit-message.error {
-  background: #fee2e2;
-  color: #7f1d1d;
-  border-left: 4px solid #ef4444;
-}
-
-.submit-message.info {
-  background: #dbeafe;
-  color: #1e40af;
-  border-left: 4px solid #3b82f6;
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-  .attendance-form-container {
-    padding: 20px;
-  }
-  
-  .month-year-selector {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 15px;
-  }
-  
-  .current-month {
-    margin-left: 0;
-    justify-content: center;
-  }
-  
-  .entry-form-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  
-  .form-cell.wide-cell {
-    grid-column: span 2;
-  }
-  
-  .sheet-header {
-    flex-direction: column;
-    align-items: stretch;
-  }
-  
-  .summary-cards {
-    grid-template-columns: 1fr;
-  }
-  
-  .submit-monthly-btn {
-    padding: 16px 20px;
-    font-size: 1.1rem;
-  }
 }
