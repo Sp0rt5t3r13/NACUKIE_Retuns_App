@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import AttendanceForm from './components/AttendanceForm';
-import churchLogo from './assets/logo.png';
+import churchLogo from './assets/logo.svg';
 import { 
   auth, 
   createUserWithEmailAndPassword, 
