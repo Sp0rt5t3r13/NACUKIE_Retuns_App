@@ -209,11 +209,6 @@ function AttendanceForm() {
 
   return (
     <div className="attendance-form-container">
-      <div className="form-header">
-        <h2>📅 Monthly Attendance & Offering Sheet</h2>
-        <p>Collect and submit monthly service data in sheet format</p>
-      </div>
-
       {submitMessage && (
         <div className={`submit-message ${submitMessage.type}`}>
           {submitMessage.type === 'success' ? '✅' : 
