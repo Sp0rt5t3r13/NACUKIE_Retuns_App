@@ -303,7 +303,7 @@ main {
 }
 
 .church-logo {
-  height: 30px; /* Adjust this: 25px, 30px, 35px */
+  height: 40px; /* Adjust this: 25px, 30px, 35px */
   width: auto;
   flex-shrink: 0;
 }
