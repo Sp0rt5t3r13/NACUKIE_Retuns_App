@@ -134,13 +134,13 @@ function App() {
         
         <main>
           <div className="dashboard-header">
-            <div className="church-branding">
+            <div className="church-header">
               <img 
                 src={churchLogo} 
                 alt="New Apostolic Church Emblem" 
                 className="church-logo"
               />
-              <div className="church-title">
+              <div className="church-text">
                 <h2>New Apostolic Church UK and Ireland Returns</h2>
                 <p className="subtitle">Monthly Service Data Collection System</p>
               </div>
