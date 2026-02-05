@@ -142,7 +142,6 @@ function App() {
               />
               <div className="church-text">
                 <h2>New Apostolic Church UK and Ireland Returns</h2>
-                <p className="subtitle">Monthly Service Data Collection System</p>
               </div>
             </div>
               
